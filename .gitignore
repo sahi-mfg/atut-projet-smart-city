@@ -10,3 +10,7 @@ wheels/
 .venv
 
 __marimo__/
+
+Train.csv
+Test.csv
+Metadata.csv
