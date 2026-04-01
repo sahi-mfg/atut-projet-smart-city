@@ -9,10 +9,11 @@ wheels/
 # Virtual environments
 .venv
 
-__marimo__/
 
 Train.csv
 Test.csv
-Metadata.csv
+airqo_metadata.csv
 
 catboost_info/
+__marimo__/
+

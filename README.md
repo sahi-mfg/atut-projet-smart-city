@@ -1,17 +1,17 @@
-# 🌍 Projet Data Scientist: Prédiction de la Qualité de l'Air
+# Projet Data Scientist: Prédiction de la Qualité de l'Air
 
-## 📋 Description
+## Description
 
 Ce projet vise à prédire la qualité de l'air dans une ville intelligente (Smart City) en utilisant des techniques avancées de machine learning. Le projet utilise des données météorologiques temporelles et des métadonnées des localisations pour entraîner des modèles de prédiction.
 
-## 🎯 Objectifs
+## Objectifs
 
 - **Feature Engineering**: Création de variables dérivées à partir de séries temporelles météorologiques
 - **Modélisation**: Entraînement de modèles avancés (LightGBM, XGBoost, CatBoost)
 - **Dashboard**: Interface interactive avec Streamlit pour visualiser les prédictions
 - **Analyse**: Compréhension des facteurs influençant la qualité de l'air
 
-## 📊 Dataset
+## Dataset
 
 ### Fichiers disponibles
 - `Train.csv`: Données d'entraînement avec variables météorologiques et qualité de l'air
@@ -30,7 +30,7 @@ Ce projet vise à prédire la qualité de l'air dans une ville intelligente (Sma
 ### Variable cible
 - `target`: Qualité de l'air (valeur numérique à prédire)
 
-## 🛠️ Technologies Utilisées
+## Technologies Utilisées
 
 - **Package Manager**: UV (gestion des dépendances Python)
 - **Notebook**: Marimo (alternative moderne à Jupyter)
@@ -38,7 +38,7 @@ Ce projet vise à prédire la qualité de l'air dans une ville intelligente (Sma
 - **Machine Learning**: LightGBM, XGBoost, CatBoost
 - **Data Science**: Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn, Plotly
 
-## 🚀 Installation et Démarrage
+## Installation et Démarrage
 
 ### 1. Cloner le repository
 ```bash
@@ -55,33 +55,27 @@ uv init
 uv add pandas numpy scikit-learn lightgbm xgboost catboost matplotlib seaborn plotly streamlit marimo tqdm
 ```
 
-### 3. Lancer le notebook Marimo
-```bash
-uv run marimo edit air_quality_prediction.py
-```
 
 ### 4. Lancer le dashboard Streamlit
 ```bash
 uv run streamlit run streamlit_dashboard.py
 ```
 
-## 📁 Structure du Projet
+## Structure du Projet
 
 ```
 AirQo/
-├── air_quality_prediction.py     # Notebook Marimo pour l'entraînement des modèles
+├── air_quality_prediction.ipynb     # Notebook pour l'entraînement des modèles
 ├── streamlit_dashboard.py       # Dashboard Streamlit interactif
 ├── Train.csv                    # Données d'entraînement
 ├── Test.csv                     # Données de test
 ├── airqo_metadata.csv           # Métadonnées des localisations
-├── sample_sub.csv               # Exemple de soumission
-├── submission.csv               # Prédictions finales (générées)
 ├── README.md                    # Documentation du projet
 ├── pyproject.toml              # Configuration UV
 └── uv.lock                     # Lockfile des dépendances
 ```
 
-## 🔧 Méthodologie
+## Méthodologie
 
 ### 1. Feature Engineering
 
@@ -118,14 +112,14 @@ AirQo/
 
 - **Stratégie**: K-Fold avec K=5
 - **Métrique principale**: RMSE (Root Mean Square Error)
-- **Métriques secondaires**: MAE, R²
+- **Métriques secondaires**: MAE
 
-## 📈 Résultats Attendus
+## Résultats Attendus
 
 ### Performance des modèles
-- **LightGBM**: RMSE ~15.2, R² ~0.82
-- **XGBoost**: RMSE ~15.8, R² ~0.80
-- **CatBoost**: RMSE ~16.1, R² ~0.78
+- **LightGBM**: RMSE 28.0238
+- **XGBoost**: RMSE 26.9405
+- **CatBoost**: RMSE 28.6719
 
 ### Features les plus importantes
 1. Température moyenne
@@ -134,15 +128,15 @@ AirQo/
 4. Score de pollution domestique
 5. Précipitations moyennes
 
-## 🌐 Dashboard Streamlit
+## Dashboard Streamlit
 
 Le dashboard propose plusieurs fonctionnalités:
 
 ### Pages disponibles
-1. **🏠 Accueil**: Vue d'ensemble du projet et métriques principales
-2. **📈 Analyse des Données**: Exploration visuelle des données
-3. **🤖 Prédiction**: Interface pour faire des prédictions
-4. **📋 Résultats**: Performance des modèles et insights
+1. **Accueil**: Vue d'ensemble du projet et métriques principales
+2. **Analyse des Données**: Exploration visuelle des données
+3. **Prédiction**: Interface pour faire des prédictions
+4. **Résultats**: Performance des modèles et insights
 
 ### Fonctionnalités interactives
 - Visualisation des distributions
@@ -151,7 +145,7 @@ Le dashboard propose plusieurs fonctionnalités:
 - Comparaison des modèles
 - Graphiques dynamiques avec Plotly
 
-## 🔬 Analyse Exploratoire
+## Analyse Exploratoire
 
 ### Distribution de la qualité de l'air
 - Analyse de la distribution de la variable cible
@@ -168,7 +162,7 @@ Le dashboard propose plusieurs fonctionnalités:
 - Corrélation avec les métadonnées urbaines
 - Cartographie des zones à risque
 
-## 🚀 Améliorations Possibles
+## Améliorations Possibles
 
 ### Feature Engineering avancé
 - Moyennes glissantes sur différentes fenêtres
@@ -193,7 +187,7 @@ Le dashboard propose plusieurs fonctionnalités:
 - Mise à jour automatique des modèles
 - Alertes en temps réel
 
-## 📊 Impact Sociétal
+## Impact Sociétal
 
 ### Applications pratiques
 - **Surveillance environnementale**: Monitoring continu de la qualité de l'air
@@ -217,16 +211,7 @@ Les contributions sont bienvenues! Voici comment participer:
 4. Push vers la branche (`git push origin feature/amazing-feature`)
 5. Ouvrir une Pull Request
 
-## 📝 License
-
-Ce projet est sous licence MIT - voir le fichier LICENSE pour les détails.
-
-## 📞 Contact
-
-Pour toute question ou suggestion:
-- Email: [your-email@example.com]
-- GitHub: [your-username]
 
 ---
 
-🌍 **Développé avec passion pour un air plus pur!** 🌤️
+**Développé avec passion pour un air plus pur!**
