@@ -201,15 +201,6 @@ Le dashboard propose plusieurs fonctionnalités:
 - Optimisation des infrastructures
 - Sensibilisation citoyenne
 
-## 🤝 Contributing
-
-Les contributions sont bienvenues! Voici comment participer:
-
-1. Fork le repository
-2. Créer une branche feature (`git checkout -b feature/amazing-feature`)
-3. Commit les changements (`git commit -m 'Add amazing feature'`)
-4. Push vers la branche (`git push origin feature/amazing-feature`)
-5. Ouvrir une Pull Request
 
 
 ---
