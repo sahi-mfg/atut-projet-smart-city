@@ -9,5 +9,6 @@ wheels/
 # Virtual environments
 .venv
 
-__marimo__/Train.csv
+__marimo__/
+Train.csv
 Test.csv
