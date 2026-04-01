@@ -12,8 +12,9 @@ wheels/
 
 Train.csv
 Test.csv
-airqo_metadata.csv
 
 catboost_info/
 __marimo__/
 
+
+airqo_metadata.csv
