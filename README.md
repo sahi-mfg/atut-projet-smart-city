@@ -60,6 +60,13 @@ uv add pandas numpy scikit-learn lightgbm xgboost catboost matplotlib seaborn pl
 uv run streamlit run streamlit_dashboard.py
 ```
 
+### 4. Déployer sur Streamlit Cloud
+1. Poussez ce repository sur GitHub.
+2. Rendez-vous sur https://share.streamlit.io et connectez votre compte GitHub.
+3. Créez une nouvelle application et sélectionnez ce repository.
+4. Choisissez la branche `main` et le fichier `streamlit_dashboard.py` comme point d'entrée.
+5. Streamlit Cloud installera les dépendances à partir de `requirements.txt`.
+
 ## Structure du Projet
 
 ```
@@ -71,8 +78,10 @@ AirQo/
 ├── airqo_metadata.csv               # Métadonnées des localisations
 ├── pipeline.pkl                     # Modèle final sauvegardé
 ├── README.md                        # Documentation du projet
+├── requirements.txt                 # Dépendances Python pour Streamlit Cloud
 ├── pyproject.toml                   # Configuration UV
-└── uv.lock                          # Lockfile des dépendances
+├── uv.lock                          # Lockfile des dépendances
+└── .streamlit/config.toml           # Configuration Streamlit
 ```
 
 ## Méthodologie
