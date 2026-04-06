@@ -55,8 +55,7 @@ uv init
 uv add pandas numpy scikit-learn lightgbm xgboost catboost matplotlib seaborn plotly streamlit marimo tqdm
 ```
 
-
-### 4. Lancer le dashboard Streamlit
+### 3. Lancer le dashboard Streamlit
 ```bash
 uv run streamlit run streamlit_dashboard.py
 ```
@@ -66,13 +65,14 @@ uv run streamlit run streamlit_dashboard.py
 ```
 AirQo/
 ├── air_quality_prediction.ipynb     # Notebook pour l'entraînement des modèles
-├── streamlit_dashboard.py       # Dashboard Streamlit interactif
-├── Train.csv                    # Données d'entraînement
-├── Test.csv                     # Données de test
-├── airqo_metadata.csv           # Métadonnées des localisations
-├── README.md                    # Documentation du projet
-├── pyproject.toml              # Configuration UV
-└── uv.lock                     # Lockfile des dépendances
+├── streamlit_dashboard.py           # Dashboard Streamlit interactif
+├── Train.csv                        # Données d'entraînement
+├── Test.csv                         # Données de test
+├── airqo_metadata.csv               # Métadonnées des localisations
+├── pipeline.pkl                     # Modèle final sauvegardé
+├── README.md                        # Documentation du projet
+├── pyproject.toml                   # Configuration UV
+└── uv.lock                          # Lockfile des dépendances
 ```
 
 ## Méthodologie
@@ -117,9 +117,17 @@ AirQo/
 ## Résultats Attendus
 
 ### Performance des modèles
-- **LightGBM**: RMSE 28.0238
-- **XGBoost**: RMSE 26.9405
-- **CatBoost**: RMSE 28.6719
+- **LightGBM**: RMSE 25.53, R2 0.64
+- **XGBoost**: RMSE 25.53, R2 0.64
+- **CatBoost**: RMSE 26.44, R2 0.61
+- **Ensemble**: RMSE 25.53, R2 0.64
+
+### Améliorations des modèles
+- Log-transformation de la target pour stabiliser la distribution
+- Feature engineering enrichi avec médiane, skewness, kurtosis, tendances et moyennes glissantes
+- Fusion des métadonnées de localisation pour enrichir les prédictions
+- Validation croisée K-Fold (K=5) pour une meilleure estimation de généralisation
+- Ensembling LightGBM + XGBoost + CatBoost pour la prédiction finale
 
 ### Features les plus importantes
 1. Température moyenne
@@ -144,6 +152,7 @@ Le dashboard propose plusieurs fonctionnalités:
 - Prédictions manuelles avec sliders
 - Comparaison des modèles
 - Graphiques dynamiques avec Plotly
+- Résultats de prédiction colorés : vert=bonne qualité, jaune=qualité moyenne, rouge=mauvaise qualité
 
 ## Analyse Exploratoire
 
@@ -204,5 +213,3 @@ Le dashboard propose plusieurs fonctionnalités:
 
 
 ---
-
-**Développé avec passion pour un air plus pur!**

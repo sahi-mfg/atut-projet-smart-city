@@ -70,7 +70,7 @@ st.markdown(
 def load_model_artifact():
     try:
         pipeline = joblib.load("pipeline.pkl")
-        return pipeline  # dict: {"model": ..., "features": ...}
+        return pipeline
     except Exception as e:
         st.error(f"Erreur chargement modèle: {e}")
         return None
@@ -126,16 +126,38 @@ def preprocess_data(df, metadata_df):
             df[f"{col}_std"] = df[col].apply(lambda x: stat(x, np.std))
             df[f"{col}_min"] = df[col].apply(lambda x: stat(x, np.min))
             df[f"{col}_max"] = df[col].apply(lambda x: stat(x, np.max))
+            df[f"{col}_median"] = df[col].apply(lambda x: stat(x, np.median))
+            df[f"{col}_skew"] = df[col].apply(
+                lambda x: pd.Series(x).skew() if len(x) > 0 else 0
+            )
+            df[f"{col}_kurt"] = df[col].apply(
+                lambda x: pd.Series(x).kurtosis() if len(x) > 0 else 0
+            )
             df[f"{col}_trend"] = df[col].apply(
-                lambda x: x[-1] - x[0] if len(x) > 1 else 0
+                lambda x: np.polyfit(range(len(x)), x, 1)[0] if len(x) > 1 else 0
+            )
+            df[f"{col}_roll_mean_10"] = df[col].apply(
+                lambda x: np.mean(x[-10:])
+                if len(x) >= 10
+                else np.mean(x)
+                if len(x) > 0
+                else 0
             )
 
     # Merge metadata
     if metadata_df is not None and "location" in df.columns:
         df = df.merge(metadata_df, on="location", how="left")
-        df["pop_density"] = df["popn"] / (df["km2"] + 1e-8)
+        metadata_numeric = df.select_dtypes(include=[np.number]).columns.tolist()
+        for col in metadata_numeric:
+            if df[col].isna().any():
+                df[col] = df[col].fillna(df[col].mean())
 
-    # IMPORTANT : drop colonnes originales
+        # Encode location the same way as training
+        from sklearn.preprocessing import LabelEncoder
+
+        le = LabelEncoder()
+        df["location_encoded"] = le.fit_transform(df["location"].astype(str))
+
     df = df.drop(columns=features, errors="ignore")
 
     return df
@@ -164,7 +186,7 @@ if page == "Accueil":
 
     ### Fonctionnalités
     - **Analyse exploratoire** des données de qualité de l'air
-    - **Prédictions interactives** avec le modèle gagnant (XGBoost)
+    - **Prédictions interactives** avec le modèle gagnant (Ensemble de LightGBM, XGBoost et CatBoost)
     - **Visualisation** des tendances et patterns
     - **Comparaison** des performances des modèles
 
@@ -179,7 +201,7 @@ if page == "Accueil":
     - CatBoost
 
     ### Meilleur modèle
-    - XGBoost avec un RMSE de 26.9405 sur le test set
+    - Modèle d'ensemble (LightGBM + XGBoost + CatBoost) entraîné avec transformation log
     """)
 
     # Métriques principales
@@ -343,15 +365,36 @@ elif page == "Prédiction":
     if model_artifact is None:
         st.stop()
 
-    model = model_artifact["model"]
-    features = model_artifact["features"]
+    features = model_artifact.get("features")
+    model = model_artifact.get("model")
+    ensemble_models = model_artifact.get("models")
 
     import xgboost as xgb
 
-    def predict_model(model, X):
-        if "xgboost" in str(type(model)).lower():
-            return model.predict(xgb.DMatrix(X))
-        return model.predict(X)
+    def predict_single(model_obj, X):
+        raw_pred = None
+        model_type = str(type(model_obj)).lower()
+        if "xgboost" in model_type:
+            raw_pred = model_obj.predict(xgb.DMatrix(X))
+        else:
+            raw_pred = model_obj.predict(X)
+        return np.expm1(raw_pred)
+
+    def predict_model(model_obj, X):
+        if ensemble_models is not None:
+            preds = [predict_single(m, X) for m in ensemble_models.values()]
+            return np.mean(preds, axis=0)
+        if model_obj is not None:
+            return predict_single(model_obj, X)
+        st.error("Aucun modèle trouvé dans le pipeline")
+        return np.array([])
+
+    def quality_status(value):
+        if value < 50:
+            return "Bonne qualité"
+        if value < 100:
+            return "Qualité moyenne"
+        return "Mauvaise qualité"
 
     prediction_mode = st.radio(
         "Mode de prédiction:",
@@ -376,6 +419,7 @@ elif page == "Prédiction":
                 results_df = pd.DataFrame(
                     {"Localisation": df["location"], "Prédiction": preds}
                 )
+                results_df["Statut"] = results_df["Prédiction"].apply(quality_status)
 
                 st.success("✅ Prédictions terminées")
 
@@ -385,8 +429,12 @@ elif page == "Prédiction":
                     results_df,
                     x="Localisation",
                     y="Prédiction",
-                    color="Prédiction",
-                    color_continuous_scale="viridis",
+                    color="Statut",
+                    color_discrete_map={
+                        "Bonne qualité": "green",
+                        "Qualité moyenne": "yellow",
+                        "Mauvaise qualité": "red",
+                    },
                     title="Qualité de l'air prédite",
                 )
 
